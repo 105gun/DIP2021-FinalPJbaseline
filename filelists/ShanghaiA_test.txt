@@ -1,0 +1,4 @@
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/IMG_1.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/IMG_2.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/IMG_3.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/IMG_4.jpg

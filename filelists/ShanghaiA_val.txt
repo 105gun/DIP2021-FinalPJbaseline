@@ -1,0 +1,6 @@
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_100.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_101.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_102.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_103.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_104.jpg
+C:/Users/ooo69/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/IMG_105.jpg

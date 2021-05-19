@@ -74,6 +74,7 @@ def main():
     print("learning rate: ", args.lr)
     print("weight decay: ", args.weight_decay)
     print("Loss function: ", args.loss)
+    print("Max epoch: ", args.max_epoch)
 
     torch.manual_seed(args.seed)
     if not args.use_avai_gpus: os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
@@ -220,4 +221,5 @@ def main():
 
 
 if __name__ == '__main__':
+    print(torch.cuda.is_available())
     main()

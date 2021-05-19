@@ -112,16 +112,18 @@ def main(image_root_path, image_gt_path, image_save_path, image_gt_save_path):
 
 
 if __name__ == '__main__':
-    image_root_path = '/mnt/pami14/jqgao/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/images'
-    image_gt_path = '/mnt/pami14/jqgao/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/ground_truth'
-    image_save_path = '/mnt/pami23/jqgao/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/'
-    image_gt_save_path = '/mnt/pami23/jqgao/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train_gt'
+    loc = 'C:/Users/ooo69'
+
+    image_root_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/images'
+    image_gt_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/ground_truth'
+    image_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/'
+    image_gt_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train_gt'
 
     main(image_root_path, image_gt_path, image_save_path, image_gt_save_path)
 
-    image_root_path = '/mnt/pami14/jqgao/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/images'
-    image_gt_path = '/mnt/pami14/jqgao/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/ground_truth'
-    image_save_path = '/mnt/pami23/jqgao/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/'
-    image_gt_save_path = '/mnt/pami23/jqgao/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test_gt'
+    image_root_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/images'
+    image_gt_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/ground_truth'
+    image_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/'
+    image_gt_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test_gt'
 
     main(image_root_path, image_gt_path, image_save_path, image_gt_save_path)
