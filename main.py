@@ -143,6 +143,8 @@ def main():
 
     with open(os.path.join(args.checkpoints, args.save_txt), 'a') as f:
         for epoch in range(start_epoch, start_epoch + args.max_epoch):
+            if os.path.exists('./stop.txt'):
+                break
             model.train()
             epoch_loss = 0.0
 

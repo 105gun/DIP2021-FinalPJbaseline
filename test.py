@@ -73,8 +73,8 @@ if __name__ == '__main__':
                 image = data['image'].cuda()
                 gt_densitymap = data['densitymap'].cuda()
                 et_densitymap = model(image).detach()
-                print(gt_densitymap)
-                print(et_densitymap.data)
+                # print(gt_densitymap.cpu().numpy())
+                # print(et_densitymap.data)
 
                 mae = abs(et_densitymap.data.sum() - gt_densitymap.sum())
                 rmse = mae * mae
