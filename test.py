@@ -19,7 +19,7 @@ import cv2
 from tqdm import tqdm
 
 def show_heatmap(tgt, save=False):
-    print(tgt)
+    # print(tgt)
     pass
 
 if __name__ == '__main__':
