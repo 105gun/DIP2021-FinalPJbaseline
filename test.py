@@ -15,7 +15,12 @@ import sys
 import errno
 import argparse
 import math
+import cv2
 from tqdm import tqdm
+
+def show_heatmap(tgt, save=False):
+    print(tgt)
+    pass
 
 if __name__ == '__main__':
 
@@ -73,7 +78,7 @@ if __name__ == '__main__':
                 image = data['image'].cuda()
                 gt_densitymap = data['densitymap'].cuda()
                 et_densitymap = model(image).detach()
-                # print(gt_densitymap.cpu().numpy())
+                show_heatmap(gt_densitymap.cpu().numpy())
                 # print(et_densitymap.data)
 
                 mae = abs(et_densitymap.data.sum() - gt_densitymap.sum())
