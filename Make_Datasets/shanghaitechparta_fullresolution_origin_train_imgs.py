@@ -15,24 +15,62 @@ import math
 from tqdm import tqdm
 
 
-def gaussian_filter_density(gt, pts, r=15, c=15, sigma=4):
+def show_heatmap(tgt, num=0, show=True, save=None):
+    tgt = tgt
+    plt.imshow(tgt, cmap=plt.cm.jet)
+    plt.xlabel(str(num))
+    if show:
+        plt.show()
+    if save != None:
+        plt.savefig(save)
+
+
+class perspective:
+    def __init__(self, x1, y1, siz1, x2, y2, siz2):
+        self.x1=x1
+        self.x2=x2
+        self.y1=y1
+        self.y2=y2
+        self.siz1=siz1
+        self.siz2=siz2
+
+    def get(self, x, y):
+        # return the kernal size and sigma of (x,y)
+        rtn = self.cal(x, y)
+        return (rtn*2+1), rtn//3
+    
+    def cal(self, x, y):
+        t = math.ceil((y-self.y1)/(self.y2-self.y1)*self.siz2 -
+                      (y-self.y2)/(self.y2-self.y1)*self.siz1)
+        t = max(12, t)
+        return t
+
+
+def gaussian_filter_density(gt, pts, mat2):
     density = np.zeros(gt.shape, dtype=np.float32)
     gt_count = len(pts)
+    P = perspective(mat2[0], mat2[1], mat2[2], mat2[3], mat2[4], mat2[5])
 
     if gt_count == 0:
         return density
 
     #     print('=======generating ground truth=========')
-    Fixed_H = np.multiply(cv2.getGaussianKernel(r, sigma), (cv2.getGaussianKernel(c, sigma)).T)
+    Fixed_H = np.multiply(cv2.getGaussianKernel(15, 4), (cv2.getGaussianKernel(15, 4)).T)
+    print(Fixed_H.sum())
     H = Fixed_H
     h, w = gt.shape
 
-    #     print('imageshape: ', gt.shape)
+    # print('imageshape: ', gt.shape)
 
     for i, point in enumerate(pts):
         x = min(w, max(0, abs(int(point[0]))))  # read x?
         y = min(h, max(0, abs(int(point[1]))))  # read y?
         # pixel: (y,x)
+
+        # get new size of gaussian kernel by perspective information
+        r, sigma = P.get(x, y)
+        c = r
+
         if x >= w or y >= h:
             continue
         x1 = x - int(c / 2)
@@ -44,7 +82,7 @@ def gaussian_filter_density(gt, pts, r=15, c=15, sigma=4):
         dfx2 = 0
         dfy1 = 0
         dfy2 = 0
-        change_H = False
+        change_H = True
         if x1 <= 0:
             dfx1 = abs(x1)
             x1 = 0
@@ -71,6 +109,7 @@ def gaussian_filter_density(gt, pts, r=15, c=15, sigma=4):
             H = np.multiply(cv2.getGaussianKernel(y2h - y1h + 1, sigma),
                             (cv2.getGaussianKernel(x2h - x1h + 1, sigma)).T)
 
+        # print(H.sum())
         density[y1:y2 + 1, x1:x2 + 1] += H
 
         if change_H:
@@ -80,8 +119,7 @@ def gaussian_filter_density(gt, pts, r=15, c=15, sigma=4):
     return density
 
 
-
-def main(image_root_path, image_gt_path, image_save_path, image_gt_save_path):
+def main(image_root_path, image_gt_path, image_gt_ex_path, image_save_path, image_gt_save_path):
 
     images = os.listdir(image_root_path)
     for imagename in images:
@@ -92,15 +130,24 @@ def main(image_root_path, image_gt_path, image_save_path, image_gt_save_path):
             continue
         imagepath = os.path.join(image_root_path, imagename)
         gtpath = os.path.join(image_gt_path, imagename).replace('.jpg','.mat').replace('IMG','GT_IMG')
+        gtexpath = os.path.join(image_gt_ex_path, imagename).replace('.jpg','.npy').replace('IMG','GT_EX_IMG')
+        
         imagesavepath = os.path.join(image_save_path, imagename)
         imagegtsavepath = os.path.join(image_gt_save_path, imagename)
 
         img = cv2.imread(imagepath)
         mat = scipy.io.loadmat(gtpath)
+        mat2 = np.load(gtexpath)
         points = mat['image_info'][0][0][0][0][0]
 
         density = np.zeros((img.shape[0], img.shape[1]))
-        density1 = gaussian_filter_density(density, points, r, c, sigma)
+        density1 = gaussian_filter_density(density, points, mat2)
+
+        #show_heatmap(density1)
+
+
+
+        #return
 
         cv2.imwrite(imagesavepath, img)
         np.save(imagegtsavepath.replace('.jpg', '.npy'), density1)
@@ -116,14 +163,15 @@ if __name__ == '__main__':
 
     image_root_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/images'
     image_gt_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/ground_truth'
+    image_gt_ex_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/train_data/ground_truth_ex'
     image_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train/'
     image_gt_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Train_gt'
 
-    main(image_root_path, image_gt_path, image_save_path, image_gt_save_path)
+    main(image_root_path, image_gt_path, image_gt_ex_path, image_save_path, image_gt_save_path)
 
     image_root_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/images'
     image_gt_path = loc + '/ShanghaiTech_Crowd_Counting_Dataset/part_A_final/test_data/ground_truth'
     image_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test/'
     image_gt_save_path = loc + '/CrowdCountingDatasets/ShanghaiTechPartA/fullresolution/origin/Test_gt'
 
-    main(image_root_path, image_gt_path, image_save_path, image_gt_save_path)
+    # main(image_root_path, image_gt_path, image_save_path, image_gt_save_path)

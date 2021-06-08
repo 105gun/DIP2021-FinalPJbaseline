@@ -16,11 +16,19 @@ import errno
 import argparse
 import math
 import cv2
+import matplotlib.pyplot as plt
+import matplotlib.cm as CM
 from tqdm import tqdm
 
-def show_heatmap(tgt, save=False):
-    # print(tgt)
-    pass
+
+def show_heatmap(tgt, num, show=True, save=None):
+    tgt = tgt[0][0]
+    plt.imshow(tgt, cmap=plt.cm.jet)
+    plt.xlabel(str(num))
+    if show:
+        plt.show()
+    if save!=None:
+        plt.savefig(save)
 
 if __name__ == '__main__':
 
@@ -34,6 +42,7 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, default='CSRNet')
     parser.add_argument('--test-batch', type=int, default=1)
     parser.add_argument('--seed', type=int, default=1)
+    parser.add_argument('--save', type=int, default=0)
 
     # parser.add_argument('--checkpoints', type=str, default='./checkpoints')
 
@@ -78,7 +87,9 @@ if __name__ == '__main__':
                 image = data['image'].cuda()
                 gt_densitymap = data['densitymap'].cuda()
                 et_densitymap = model(image).detach()
-                show_heatmap(gt_densitymap.cpu().numpy())
+                if args.save==1:
+                    show_heatmap(gt_densitymap.cpu().numpy(), gt_densitymap.sum(), False, 'C:/Users/ooo69/CrowdCountingDatasets/outputs/ShanghaiA_GT'+str(i+1)+'.png')
+                    show_heatmap(et_densitymap.data.cpu().numpy(), et_densitymap.data.sum(), False, 'C:/Users/ooo69/CrowdCountingDatasets/outputs/ShanghaiA_ET'+str(i+1)+'.png')
                 # print(et_densitymap.data)
 
                 mae = abs(et_densitymap.data.sum() - gt_densitymap.sum())
